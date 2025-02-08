@@ -6,12 +6,13 @@ Stay calm
 Use development branch
 Commit
 Click on main > Checkout to jump to main
+A.
+Click on development > merge 'development' into 'main'
+or
+B.
 Use main menu Git > merge
 Select development to merge on main
 
-or
-
-Click on development > merge 'development' into 'main'
 Push from local main to remote main on GitHub
 
 Take a deep breath again...
