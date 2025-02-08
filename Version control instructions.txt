@@ -5,7 +5,7 @@ Take a deep breath...
 Stay calm
 Use development branch
 Commit
-Right click on main > Checkout to jump to main
+Click on main > Checkout to jump to main
 Use main menu Git > merge
 Select development to merge on main
 Push from local main to remote main on GitHub
