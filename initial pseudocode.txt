@@ -1,0 +1,107 @@
+CLASS Employee
+    PRIVATE name
+    PRIVATE age
+    PRIVATE position
+    PRIVATE salary
+    PUBLIC department
+    PUBLIC location
+
+FUNCTION Constructor(name, age, position, salary, department, location)
+    SET self.name = name
+    SET self.age = age
+    SET self.position = position
+    SET self.salary = salary
+    SET self.department = department
+    SET self.location = location
+
+FUNCTION Write_Initial_Employees_To_File()
+INITIALIZE employee_list WITH at least 4 Employee objects
+OPEN 'Current_Employees' file in write mode
+WRITE employee_list to file in chosen format (.txt, .csv, .json)
+CLOSE file
+
+FUNCTION Add_Employee()
+PROMPT user for employee details
+OPEN 'Current_Employees' file in read mode
+READ employee data into list
+CHECK if employee with same name or position exists
+IF exists THEN
+DISPLAY "Employee with same name or position already exists."
+RETURN
+APPEND new employee details to list
+OPEN 'Current_Employees' file in write mode
+WRITE updated list to file
+CLOSE file
+
+FUNCTION View_All_Employees()
+OPEN 'Current_Employees' file in read mode
+READ all employee data
+DISPLAY employee details
+CLOSE file
+
+FUNCTION Update_Employee_Details()
+PROMPT user for employee name to update
+OPEN 'Current_Employees' file in read mode
+READ employee data into list
+FIND employee by name
+IF employee found THEN
+PROMPT user for updated details
+MODIFY employee details
+OPEN 'Current_Employees' file in write mode
+WRITE updated list to file
+CLOSE file
+ELSE
+DISPLAY "Employee not found."
+
+FUNCTION Delete_Employee()
+PROMPT user for employee name to delete
+OPEN 'Current_Employees' file in read mode
+READ employee data into list
+FIND and REMOVE employee by name
+OPEN 'Current_Employees' file in write mode
+WRITE updated list to file
+CLOSE file
+
+FUNCTION Search_Employee()
+PROMPT user for employee name to search
+OPEN 'Current_Employees' file in read mode
+READ employee data into list
+SEARCH for matching employee
+IF found THEN
+DISPLAY employee details
+ELSE
+DISPLAY "Employee not found."
+CLOSE file
+
+FUNCTION Sort_Employees()
+PROMPT user for sorting criteria (salary or position)
+OPEN 'Current_Employees' file in read mode
+READ employee data into list
+SORT list based on chosen criteria
+DISPLAY sorted employee details
+CLOSE file
+
+FUNCTION main()
+CALL Write_Initial_Employees_To_File()
+LOOP
+DISPLAY menu options
+PROMPT user for choice
+IF choice is Add Employee THEN
+CALL Add_Employee()
+ELSE IF choice is View All Employees THEN
+CALL View_All_Employees()
+ELSE IF choice is Update Employee Details THEN
+CALL Update_Employee_Details()
+ELSE IF choice is Delete Employee THEN
+CALL Delete_Employee()
+ELSE IF choice is Search Employee THEN
+CALL Search_Employee()
+ELSE IF choice is Sort Employees THEN
+CALL Sort_Employees()
+ELSE IF choice is Exit THEN
+BREAK LOOP
+ELSE
+DISPLAY "Invalid choice, please try again."
+
+CALL main()
+
