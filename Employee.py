@@ -1,3 +1,6 @@
+from pydoc import locate
+
+
 class Employee:
     """To use as a blueprint to have employee objects"""
     __name: str
@@ -19,3 +22,40 @@ class Employee:
         self.department = department
         self.location = location
 
+#All getters to access and read object's attributes
+    def getName(self):
+        return self.__name
+
+    def getAge(self):
+        return self.__age
+
+    def getPosition(self):
+        return self.__position
+
+    def getSalary(self):
+        return self.__salary
+
+    def getDepartment(self):
+        return self.department
+
+    def getLocation(self):
+        return self.location
+
+#All setters to change and update object's attributes
+    def setName(self, name):
+        self.__name = name
+
+    def setAge(self, age):
+        self.__age = age
+
+    def setPosition(self, position):
+        self.__position = position
+
+    def setSalary(self, salary):
+        self.__salary = salary
+
+    def setDepartment(self, department):
+        self.department = department
+
+    def setLocation(self, location):
+        self.location = location
