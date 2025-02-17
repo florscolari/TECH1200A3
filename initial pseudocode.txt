@@ -44,6 +44,21 @@ OPEN 'Current_Employees' file in read mode
 READ all employee data
 DISPLAY employee details
 CLOSE file
+------
+# Opening JSON file
+f = open('data.json')
+
+# returns JSON object as a dictionary
+data = json.load(f)
+
+# Iterating through the json list
+for i in data['emp_details']:
+    print(i)
+
+# Closing file
+f.close()
+------
+
 
 FUNCTION Update_Employee_Details()
 PROMPT user for employee name to update

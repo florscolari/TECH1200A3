@@ -1,3 +1,4 @@
+import json
 class Employee:
     """To use as a blueprint to have employee objects"""
     __first_name: str
@@ -124,3 +125,36 @@ class Employee:
 
 # running the application
 Employee.main()
+
+#writing employees
+#To error handling I have to use IOE error script
+"""If the file exists, then go and perform the action (r/w/a)
+    caseDISPLAY: read the file and display data -> it could be a function to invoke here
+    caseAPPEND:
+        if name AND lastName already exists
+            "This employee already exists"
+        else 
+            append employee
+            display successful message
+else: create the file (w)
+"""
+
+def add_employees():
+    """To add employees to the current employee list"""
+    # Check the file exists and handling if it doesn't
+    try:
+        # Opening JSON file
+        f = open('Current_Employees.json')
+        # returns JSON object as a dictionary
+        dataDict = json.load(f)
+        print(dataDict)
+        # Closing file
+        f.close()
+
+    except IOError:
+        """File doesn't exist so it is created now"""
+        emptyList = {""}
+        with open('Current_Employees.json', 'w') as file:
+            json.dump(emptyList, file)
+        file.close()
+add_employees()
