@@ -3,6 +3,7 @@
 # ----- LIBRARIES / MODULES -----
 import json
 
+
 class Employee:
     """To use as a blueprint to have employee objects"""
     __first_name: str
@@ -104,13 +105,13 @@ class Employee:
 
     def __str__(self):
         return (
-                    "\n---------------------- " + "\nName: " + self.__first_name + " " + self.__last_name + "\nDate of Birth: " + str(
-                self.__dob) + "\nAge: " + str(
-                self.__age) + " Years old" + "\nPosition: " + self.__position + "\nEmployment Type: " +
-                    self.employment_type + "\nWork Email: " + self.work_email + "\nSalary: $" + str(
-                float(self.__salary)) +
-                    "\nBank Account: " + str(self.__bank_account) + "\nDepartment: " + self.department +
-                    "\nLocation: " + self.location)
+                "\n---------------------- " + "\nName: " + self.__first_name + " " + self.__last_name + "\nDate of Birth: " + str(
+            self.__dob) + "\nAge: " + str(
+            self.__age) + " Years old" + "\nPosition: " + self.__position + "\nEmployment Type: " +
+                self.employment_type + "\nWork Email: " + self.work_email + "\nSalary: $" + str(
+            float(self.__salary)) +
+                "\nBank Account: " + str(self.__bank_account) + "\nDepartment: " + self.department +
+                "\nLocation: " + self.location)
 
     def convert_to_dict(self):
         """To convert an employee class object to a dictionary"""
@@ -159,34 +160,73 @@ def view_employees():
     f = open('Current_Employees.json')
 
     # returns JSON object as a list that contains dictionary
-    #TODO: I could use table styles from Rich library to present the employee list. NICE TO HAVE
+    # TODO: I could use table styles from Rich library to present the employee list. NICE TO HAVE
     data = json.load(f)
     for emp in data:
         print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
             "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
                "\nPosition: " + emp["position"] + "\nEmployment Type: " +
-               emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(float(emp["salary"])) +
+               emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
+                    float(emp["salary"])) +
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
 
+def view_employee_details():
+    first_name = input("First name: ").capitalize()
+    last_name = input("Last name: ").capitalize()
+    dob = input("Date of birth (dd/mm/yyyy): ")
+
+    # Checkpoint for employee details
+    employee_details(first_name, last_name, dob)
+
+
+def employee_details(first_name, last_name, dob):
+    # Opening JSON file
+    f = open('Current_Employees.json')
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+    employees_found = []
+
+    employees_found = [emp for emp in data if emp["first_name"] == first_name and emp["last_name"] == last_name and
+                       emp["dob"] == dob]
+    if employees_found:
+        for emp in employees_found:
+            print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
+                "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
+                   "\nPosition: " + emp["position"] + "\nEmployment Type: " +
+                   emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
+                        float(emp["salary"])) +
+                   "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
+                   "\nLocation: " + emp["location"]))
+    else:
+        print("No employee has been found.")
+
 
 def search_employee():
-    field = input("Enter 1 for first name or 2 for last name: ").capitalize()
+    field = input("Enter 1 for first name, 2 for last name or 3 for work email: ").capitalize()
     if field == "1":
         field = "first_name"
         field_user = field_to_field_user(field)
+        value = input(f"Enter {field_user}: ").capitalize()
     elif field == "2":
         field = "last_name"
         field_user = field_to_field_user(field)
+        value = input(f"Enter {field_user}: ").capitalize()
+    elif field == "3":
+        field = "work_email"
+        field_user = field_to_field_user(field)
+        value = input(f"Enter {field_user}: ").lower()  # not happy with add value within conditional but quick fix to
+        # lower and capitalise treatments
     else:
-        print("select a valid option: 1 or 2")
-    value = input(f"Enter {field_user}: ").capitalize()
-    search_employee_by(field,value)
+        print("select a valid option: 1, 2 or 3")
+    search_employee_by(field, value)
+
 
 def field_to_field_user(field):
-    field_user = field.lower().replace("_"," ")
+    field_user = field.lower().replace("_", " ")
     return field_user
+
 
 def search_employee_by(field, value):
     # Opening JSON file
@@ -200,20 +240,19 @@ def search_employee_by(field, value):
             employees_found.append(emp)
     print(f"We found {len(employees_found)} records with {field_user}: {value}")
     for index, x in enumerate(employees_found, start=1):
-        print(index,".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
+        print(index, ".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
 
 
-
-
-
-def check_duplicates(name, lastName, dob):
+def check_duplicates(first_name, last_name, dob):
     # Opening JSON file
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
     for emp in data:
-        if name == emp["first_name"].capitalize() and lastName == emp["last_name"].capitalize() and dob == emp["dob"]:
-            print(f"{name.capitalize()} {lastName.capitalize()} with date of birth: {dob} is already registered in the system")
+        if first_name == emp["first_name"].capitalize() and last_name == emp["last_name"].capitalize() and dob == emp[
+            "dob"]:
+            print(f"{first_name.capitalize()} {last_name.capitalize()} with date of birth: {dob} is already "
+                  f"registered in the system")
 
             while True:
                 userChoice = input("Press 1 to enter employee details again, or 2 to cancel this task")
@@ -225,7 +264,8 @@ def check_duplicates(name, lastName, dob):
                 else:
                     print("Please enter 1 to enter details again or 2 to cancel this task")
 
-#To check int user inputs (e.g. age and salary)
+
+# To check int user inputs (e.g. age and salary)
 def check_integer(attribute):
     while not attribute.isnumeric():
         print("Please enter a valid numeric value")
@@ -238,12 +278,13 @@ def add_employee():
     print("-" * 80)
     print("Enter details for the new employee: ")
     while True:
-        name = input("First name: ").capitalize()
-        lastName = input("Last name: ").capitalize()
+        first_name = input("First name: ").capitalize()
+        last_name = input("Last name: ").capitalize()
         dob = input("Date of birth (dd/mm/yyyy): ")
 
         # Checkpoint to check duplicates - starts
-        duplicate_result = check_duplicates(name, lastName, dob) # checking for duplicates. If duplicate is True,
+        duplicate_result = check_duplicates(first_name, last_name,
+                                            dob)  # checking for duplicates. If duplicate is True,
         # it is coming back with a decision to retry or cancel
 
         ## To handle either is returning duplicate True or False
@@ -254,7 +295,7 @@ def add_employee():
             continue
         # Checkpoint to check duplicates - ends
 
-        #using the function to check the right data type
+        # using the function to check the right data type
         age = check_integer(input("Age: "))
 
         position = input("Position: ").capitalize()
@@ -263,19 +304,18 @@ def add_employee():
             print(f"You wrote: {employment_type}. Please enter: full-time, part-time or contractor")
             employment_type = input().capitalize()
 
-
         work_email = input("Work email: ")
 
         salary = check_integer(input("Salary ($): "))
         bank_account = check_integer(input("Bank account number: "))
 
-
         department = input("Department: ").capitalize()
         location = input("Location: ").capitalize()
 
-    # storing values for the new employee in a list of dictionary/ies. Reusing the same as I used for multiple employees
+        # storing values for the new employee in a list of dictionary/ies. Reusing the same as I used for multiple employees
         new_employee = [
-        Employee(name, lastName, dob, age, position, employment_type, work_email, salary, bank_account, department, location)]
+            Employee(first_name, last_name, dob, age, position, employment_type, work_email, salary, bank_account,
+                     department, location)]
 
         # reading and storing existing employees in a temporary list
         with open("Current_Employees.json", "r") as file:
@@ -290,10 +330,12 @@ def add_employee():
         file.close()
 
         # displaying success message
-        print("-"*80)
-        print("Employee has been added successfully! Employee:", name + " " + lastName)
+        print("-" * 80)
+        print(f"Employee {first_name} {last_name} has been added successfully.")
         break
-#Menu options - reusing structure from A2 TicketManagementSystem
+
+
+# Menu options - reusing structure from A2 TicketManagementSystem
 menuOptions = {
     1: "Search for an Employee",
     2: "Add an employee",
@@ -306,34 +348,37 @@ menuOptions = {
 }
 
 
-#T01. Welcome & Get the user's name
+# T01. Welcome & Get the user's name
 def welcome(userName):
     print("-" * 80)
-    print("Welcome to Eminent,", userName.title(),".\n"
-    """I am Ema, your Employee Management Asistant. \nLet's sort and organise some people together. What would you like to do next?""")
+    print("Welcome to Eminent,", userName.title(),
+          ".\n" """I am Ema, your Employee Management Asistant. \nLet's sort and organise some people together. What 
+          would you like to do next?""")
+
 
 def greeting_midway():
     print("-" * 80)
     print("What would you like to do next?")
 
 
-#T02. Display the main menu
+# T02. Display the main menu
 def main_menu():
-    print("-"*80)
+    print("-" * 80)
     for number, task in menuOptions.items():
-        print("[",number,"] :", task)
+        print("[", number, "] :", task)
     userMenuChoice = check_integer(input("Choose a number: "))
-    while userMenuChoice < 1 or userMenuChoice > 8: #Checking that is a numeric value within the expected range
+    while userMenuChoice < 1 or userMenuChoice > 8:  # Checking that is a numeric value within the expected range
         print("Choose a valid number between 1 and 8 please.")
         userMenuChoice = int(input("Choose a number: "))
     return userMenuChoice
+
 
 # ----- Run the program -------
 
 # Initialisation with 4 current employees added to JSON - Current_Employees.json
 Employee.main()
 
-#The main menu on a loop to run the program
+# The main menu on a loop to run the program
 print("You are just about to access to the Company's Employee Management System")
 userName = input("Enter your name to start: ")
 welcome(userName)
@@ -347,7 +392,7 @@ while True:
     elif userChoice == 3:
         view_employees()
     elif userChoice == 4:
-        print("TODO: View employee details")
+        view_employee_details()
     elif userChoice == 5:
         print("TODO: Update employee details")
     elif userChoice == 6:

@@ -9,6 +9,7 @@ Challenges
 1. Understanding how a JSON file works
 2. From class objects -> dictionaries -> to JSON file (screenshots before vs after)
 3. Returning the updated value for numeric inputs (age, salary)
+4. list comprehension to arrange if and for loop on a list
 
 
 name = input("Enter employee's first name").capitalize()
