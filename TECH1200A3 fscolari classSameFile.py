@@ -1,7 +1,5 @@
+## Start of the script - 1847863 F. Scolari KBS 2025 TECH1200 Assessment 3
 import json
-
-from markdown_it.common.html_re import attribute
-
 
 class Employee:
     """To use as a blueprint to have employee objects"""
@@ -195,14 +193,16 @@ def check_integer(attribute):
     while not attribute.isnumeric():
         print("Please enter a valid numeric value")
         attribute = input()
-    return attribute
+    return int(attribute)
+
 
 def add_employee():
     """To add a new employee to the current list"""
-    print("Enter new employee details: ")
+    print("-" * 80)
+    print("Enter details for the new employee: ")
     name = input("First name: ").capitalize()
-    lastName = input("Lst name: ").capitalize()
-    dob = input("Employee's date of birth (dd/mm/yyyy): ")
+    lastName = input("Last name: ").capitalize()
+    dob = input("Date of birth (dd/mm/yyyy): ")
 
     #Checkpoint to check duplicates - starts
     check_duplicates(name, lastName, dob)
@@ -214,6 +214,11 @@ def add_employee():
 
     position = input("Position: ").capitalize()
     employment_type = input("Employment type (full-time, part-time, contractor): ").capitalize()
+    while employment_type != "Full-time" and employment_type != "Part-time" and employment_type != "Contractor":
+        print(f"You wrote: {employment_type}. Please enter: full-time, part-time or contractor")
+        employment_type = input().capitalize()
+
+
     work_email = input("Work email: ")
 
     salary = check_integer(input("Salary ($): "))
@@ -242,44 +247,70 @@ def add_employee():
         json.dump(employees, file)
     file.close()
 
+    # displaying success message
+    print("-"*80)
+    print("Employee has been added successfully! Employee:", name + " " + lastName)
+
+#Menu options - reusing structure from A2 TicketManagementSystem
+menuOptions = {
+    1: "Search for an Employee",
+    2: "Add an employee",
+    3: "View current employees",
+    4: "View Employee Details",
+    5: "Update Employee Details",
+    6: "Delete an employee",
+    7: "Sort Employees",
+    8: "Exit the program"
+}
 
 
-    #calling view employees
+#T01. Welcome & Get the user's name
+def welcome(username):
+    print("-" * 80)
+    print("Welcome to Eminent,", userName.title(),".\n"
+    """I am Ema, your Employee Management Asistant. \nLet's sort and organise some people together. What would you like to do next?""")
+
+#T02. Display the main menu
+def main_menu():
+    print("-"*80)
+    for number, task in menuOptions.items():
+        print("[",number,"] :", task)
+    userMenuChoice = check_integer(input("Choose a number"))
+    while userMenuChoice < 1 or userMenuChoice > 8: #Checking that is a numeric value within the expected range
+        print("Choose a valid number between 1 and 8 please.")
+        userMenuChoice = int(input("Choose a number "))
+    return userMenuChoice
 
 # ----- Run the program -------
+
+# Initialisation with 4 current employees added to JSON - Current_Employees.json
 Employee.main()
-add_employee()
-#todo: user menu
-#view_employees()
 
-# writing employees
-# To error handling I have to use IOE error script
-"""If the file exists, then go and perform the action (r/w/a)
-            caseDISPLAY: read the file and display data -> it could be a function to invoke here
-            caseAPPEND:
-                if name AND lastName already exists
-                    "This employee already exists"
-                else 
-                    append employee
-                    display successful message
-        else: create the file (w)
-        """
+#The main menu on a loop to run the program
+print("You are just about to access to the Company's Employee Management System")
+userName = input("Enter your name to start: ")
+welcome(userName)
+while True:
+    userChoice = main_menu()
 
+    if userChoice == 1:
+        print("TODO: Search for an employee")
+    elif userChoice == 2:
+        add_employee()
+    elif userChoice == 3:
+        view_employees()
+    elif userChoice == 4:
+        print("TODO: View employee details")
+    elif userChoice == 5:
+        print("TODO: Update employee details")
+    elif userChoice == 6:
+        print("TODO: Delete an employee")
+    elif userChoice == 7:
+        print("TODO: Sort Employees")
+    elif userChoice == 8:
+        print("Exiting Eminent, your Employee Management System. Until next time!")
+        break
+    else:
+        print("Invalid choice. Please try again.")
 
-def add_employees():
-    """To add employees to the current employee list"""
-    # Check the file exists and handling if it doesn't
-    try:
-        # Opening JSON file
-        f = open('Current_Employees.json')
-        # returns JSON object as a dictionary
-        dataDict = json.load(f)
-        print(dataDict)
-        # Closing file
-        f.close()
-
-    except IOError:
-        """File doesn't exist so it is created now"""
-        f = open("Current_Employees.json", "w")
-        # Closing file
-        f.close()
+## End of the script - 1847863 F. Scolari KBS 2025 TECH1200 Assessment 3
