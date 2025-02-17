@@ -171,6 +171,7 @@ def view_employees():
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
+
 def search_employee():
     first_name = input("Enter first name: ").capitalize()
     # Opening JSON file
@@ -186,6 +187,36 @@ def search_employee():
     for index, x in enumerate(employees_found, start=1):
         print(index,".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
 
+def search_employee_():
+    field = input("Enter 1 for first name or 2 for last name: ").capitalize()
+    if field == "1":
+        field = "first_name"
+        field_user = field_to_field_user(field)
+    elif field == "2":
+        field = "last_name"
+        field_user = field_to_field_user(field)
+    else:
+        print("select a valid option: 1 or 2")
+    value = input(f"Enter {field_user}: ").capitalize()
+    search_employee_by(field,value)
+
+def field_to_field_user(field):
+    field_user = field.lower().replace("_"," ")
+    return field_user
+
+def search_employee_by(field, value):
+    # Opening JSON file
+    f = open('Current_Employees.json')
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+    employees_found = []
+    field_user = field_to_field_user(field)
+    for emp in data:
+        if emp[field] == value:
+            employees_found.append(emp)
+    print(f"We found {len(employees_found)} records with {field_user}: {value}")
+    for index, x in enumerate(employees_found, start=1):
+        print(index,".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
 
 
 
@@ -309,10 +340,10 @@ def main_menu():
     print("-"*80)
     for number, task in menuOptions.items():
         print("[",number,"] :", task)
-    userMenuChoice = check_integer(input("Choose a number"))
+    userMenuChoice = check_integer(input("Choose a number: "))
     while userMenuChoice < 1 or userMenuChoice > 8: #Checking that is a numeric value within the expected range
         print("Choose a valid number between 1 and 8 please.")
-        userMenuChoice = int(input("Choose a number "))
+        userMenuChoice = int(input("Choose a number: "))
     return userMenuChoice
 
 # ----- Run the program -------
@@ -328,7 +359,7 @@ while True:
     userChoice = main_menu()
 
     if userChoice == 1:
-        search_employee()
+        search_employee_()
     elif userChoice == 2:
         add_employee()
     elif userChoice == 3:
