@@ -1,5 +1,7 @@
 import json
 
+from markdown_it.common.html_re import attribute
+
 
 class Employee:
     """To use as a blueprint to have employee objects"""
@@ -188,24 +190,67 @@ def check_duplicates(name, lastName, dob):
                 #todo: call main manu when is ready
                 break
 
+#To check int user inputs (e.g. age and salary)
+def check_integer(attribute):
+    while not attribute.isnumeric():
+        print("Please enter a valid numeric value")
+        attribute = input()
+    return attribute
+
 def add_employee():
     """To add a new employee to the current list"""
-    print("Enter new employee details:")
-    name = input("Enter a name").capitalize()
-    lastName = input("Enter last name").capitalize()
-    dob = input("Enter employee's date of birth (dd/mm/yyyy)")
+    print("Enter new employee details: ")
+    name = input("First name: ").capitalize()
+    lastName = input("Lst name: ").capitalize()
+    dob = input("Employee's date of birth (dd/mm/yyyy): ")
 
     #Checkpoint to check duplicates - starts
     check_duplicates(name, lastName, dob)
     # Checkpoint to check duplicates - ends
 
-    print(name,lastName,dob)
+    #using the function to check the right data type
+    age = check_integer(input("Age: "))
+
+
+    position = input("Position: ").capitalize()
+    employment_type = input("Employment type (full-time, part-time, contractor): ").capitalize()
+    work_email = input("Work email: ")
+
+    salary = check_integer(input("Salary ($): "))
+    bank_account = check_integer(input("Bank account number: "))
+
+
+    department = input("Department: ").capitalize()
+    location = input("Location: ").capitalize()
+
+    # storing values for the new employee in a list of dictionary/ies. Reusing the same as I used for multiple employees
+    new_employee = [
+        Employee(name, lastName, dob, age, position,
+                 employment_type, work_email, salary,
+                 bank_account, department, location),
+        ]
+
+    # reading and storing existing employees in a temporary list
+    with open("Current_Employees.json", "r") as file:
+        employees = json.load(file)
+
+    # including this employee to the list (extracting dictionary from new_employee list)
+    employees.extend([emp.convert_to_dict() for emp in new_employee])
+
+    # writing all employees (current & new ones) on JSON file
+    with open("Current_Employees.json", "w") as file:
+        json.dump(employees, file)
+    file.close()
+
+
+
+    #calling view employees
 
 # ----- Run the program -------
 Employee.main()
 add_employee()
 #todo: user menu
-view_employees()
+#view_employees()
 
 # writing employees
 # To error handling I have to use IOE error script
