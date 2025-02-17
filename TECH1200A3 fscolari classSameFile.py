@@ -178,15 +178,16 @@ def check_duplicates(name, lastName, dob):
             userChoice = input("Press 1 to enter employee details again, or 2 to cancel this task")
 
             while userChoice != "1" and userChoice != "2":
-                userChoice = input("Please choose between 1 to enter employee details again, or 2 to cancel this "
-                                     "task")
+                userChoice = input("Please choose between 1 to enter employee details again, or 2 to cancel this task")
+
             if userChoice == "1":
-                name = input("Enter employee's first name").capitalize()
-                lastName = input("Enter employee's last name").capitalize()
-                dob = input("Enter employee's date of birth (dd/mm/yyyy)")
+                return "retry"
             elif userChoice == "2":
-                #todo: call main manu when is ready
-                break
+                return "cancel"
+            else:
+                print("Please enter 1 to enter details again or 2 to cancel this task")
+
+
 
 #To check int user inputs (e.g. age and salary)
 def check_integer(attribute):
@@ -200,17 +201,25 @@ def add_employee():
     """To add a new employee to the current list"""
     print("-" * 80)
     print("Enter details for the new employee: ")
-    name = input("First name: ").capitalize()
-    lastName = input("Last name: ").capitalize()
-    dob = input("Date of birth (dd/mm/yyyy): ")
+    while True:
+        name = input("First name: ").capitalize()
+        lastName = input("Last name: ").capitalize()
+        dob = input("Date of birth (dd/mm/yyyy): ")
 
-    #Checkpoint to check duplicates - starts
-    check_duplicates(name, lastName, dob)
-    # Checkpoint to check duplicates - ends
+        # Checkpoint to check duplicates - starts
+        duplicate_result = check_duplicates(name, lastName, dob) # checking for duplicates. If duplicate is True,
+        # it is coming back with a decision to retry or cancel
+
+        ## To handle either is returning duplicate True or False
+        if duplicate_result == "cancel":
+            print("Task has been cancelled.")
+            return
+        elif duplicate_result == "retry":
+            continue
+        # Checkpoint to check duplicates - ends
 
     #using the function to check the right data type
     age = check_integer(input("Age: "))
-
 
     position = input("Position: ").capitalize()
     employment_type = input("Employment type (full-time, part-time, contractor): ").capitalize()
@@ -269,6 +278,11 @@ def welcome(username):
     print("-" * 80)
     print("Welcome to Eminent,", userName.title(),".\n"
     """I am Ema, your Employee Management Asistant. \nLet's sort and organise some people together. What would you like to do next?""")
+
+def greeting_midway():
+    print("-" * 80)
+    print("What would you like to do next?")
+
 
 #T02. Display the main menu
 def main_menu():
