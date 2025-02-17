@@ -6,13 +6,15 @@ class Employee:
     __position: str
     __salary: float
     __dob: str
-    __bank_account:str
+    __bank_account: str
     department: str
     location: str
     employment_type: str
     work_email: str
 
-    def __init__(self, first_name, last_name, dob, age, position, employment_type, work_email, salary, bank_account, department, location):
+    def __init__(self, first_name, last_name, dob, age, position,
+                 employment_type, work_email, salary, bank_account, department,
+                 location):
         """This is the parameterised constructor to create objects and reference
         variables as object's attributes"""
         self.__first_name = first_name
@@ -27,9 +29,7 @@ class Employee:
         self.department = department
         self.location = location
 
-
-
-#All getters to access and read object's attributes
+    # All getters to access and read object's attributes
     def get_first_name(self):
         return self.__first_name
 
@@ -63,7 +63,7 @@ class Employee:
     def get_location(self):
         return self.location
 
-#All setters to change and update object's attributes
+    # All setters to change and update object's attributes
     def set_first_name(self, first_name):
         self.__first_name = first_name
 
@@ -97,10 +97,29 @@ class Employee:
     def set_location(self, location):
         self.location = location
 
-
+    # todo: declare __str__ properly with all employee's attributes
     def __str__(self):
-        return "Name: " + self.__first_name + self.__last_name + "\tPosition: " + self.__position + "\nYear: " + str(self.__salary)
+        return "Name: " + self.__first_name + self.__last_name + "\tPosition: " + self.__position + "\nYear: " + str(
+            self.__salary)
 
-  # creating static function main() for creating and using objects from 'Employee' class
+    # creating static function main() for creating and using objects from 'Employee' class
     @staticmethod
     def main():
+        """initialise the class with 4 employees"""
+        emp1 = Employee("Alice", "Anton", "12/12/2002", 23, "Admin",
+                        "Full-time", "aanton@company.com", 67.000,
+                        "66001000123456", "Sales", "Perth")
+        emp2 = Employee("Betty", "Bloom", "16/07/1988", 36, "Support Analyst",
+                        "Full-time", "bblooom@company.com", 70.000,
+                        "66001000123434", "Support", "Sydney")
+        emp3 = Employee("Caleb", "Connor", "10/02/1987", 38, "Web Developer",
+                        "Full-time", "cconnor@company.com",
+                        130.000, "66001000123423", "IT", "Dunsborough")
+        emp4 = Employee("Denton", "Dallas", "04/01/1977", 48, "Infrastructure Consultant",
+                        "Part-time", "ddallas@company.com",
+                        155.000, "66001000127621", "IT", "Perth")
+        print(emp1)
+
+
+# running the application
+Employee.main()
