@@ -104,27 +104,52 @@ class Employee:
                 "\nBank Account: " + str(self.__bank_account) + "\nDepartment: " + self.department +
                  "\nLocation: " + self.location)
 
+    def convert_to_dict(self):
+        """To convert an employee class object to a dictionary"""
+        return {
+            "first_name": self.get_first_name(),
+            "last_name": self.get_last_name(),
+            "dob": self.get_dob(),
+            "age": self.get_age(),
+            "position": self.get_position(),
+            "employment_type": self.get_employment_type(),
+            "work_email": self.get_work_email(),
+            "salary": self.get_salary(),
+            "bank_account": self.get_bank_account(),
+            "department": self.get_department(),
+            "location": self.get_location()
+       }
     # creating static function main() for creating and using objects from 'Employee' class
     @staticmethod
     def main():
         """initialise the class with 4 employees"""
-        emp1 = Employee("Alice", "Anton", "12/12/2002", 23, "Admin",
-                        "Full-time", "aanton@company.com", 67000,
-                        "66001000123456", "Sales", "Perth")
-        emp2 = Employee("Betty", "Bloom", "16/07/1988", 36, "Support Analyst",
-                        "Full-time", "bblooom@company.com", 70000,
-                        "66001000123434", "Support", "Sydney")
-        emp3 = Employee("Caleb", "Connor", "10/02/1987", 38, "Web Developer",
-                        "Full-time", "cconnor@company.com",
-                        130000, "66001000123423", "IT", "Dunsborough")
-        emp4 = Employee("Denton", "Dallas", "04/01/1977", 48, "Infrastructure Consultant",
+        employees = [
+            Employee("Alice", "Anton", "12/12/2002", 23, "Admin",
+                            "Full-time", "aanton@company.com", 67000,
+                            "66001000123456", "Sales", "Perth"),
+            Employee("Betty", "Bloom", "16/07/1988", 36, "Support Analyst",
+                            "Full-time", "bblooom@company.com", 70000,
+                            "66001000123434", "Support", "Sydney"),
+            Employee("Caleb", "Connor", "10/02/1987", 38, "Web Developer",
+                            "Full-time", "cconnor@company.com",
+                            130000, "66001000123423", "IT", "Dunsborough"),
+            Employee("Denton", "Dallas", "04/01/1977", 48, "Infrastructure Consultant",
                         "Part-time", "ddallas@company.com",
                         155000, "66001000127621", "IT", "Perth")
-        print(emp1, emp2, emp3, emp4)
-
+            ]
+        with open('Current_Employees.json', 'w') as file:
+        #I cannot use dict methods on a list, but I can use a for loop to use the convert to dict function on each
+        # list item
+            json.dump([emp.convert_to_dict() for emp in employees], file)
+        file.close()
 
 # running the application
 Employee.main()
+
+
+
+
+
 
 #writing employees
 #To error handling I have to use IOE error script
@@ -153,8 +178,6 @@ def add_employees():
 
     except IOError:
         """File doesn't exist so it is created now"""
-        emptyList = {""}
-        with open('Current_Employees.json', 'w') as file:
-            json.dump(emptyList, file)
-        file.close()
-add_employees()
+        f = open("Current_Employees.json", "w")
+        # Closing file
+        f.close()

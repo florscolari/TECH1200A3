@@ -1,0 +1,11 @@
+
+
+Documentation
+1. Initial pseudocode
+2. Iterated pseudocode
+3.
+
+Challenges
+1. Understanding how a JSON file works
+2. From class objects -> dictionaries -> to JSON file (screenshots before vs after)
+
