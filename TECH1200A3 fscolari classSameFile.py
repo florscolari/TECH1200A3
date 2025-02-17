@@ -172,8 +172,7 @@ def view_employees():
                "\nLocation: " + emp["location"]))
 
 def search_employee():
-     # To force to use a terminal that allows to display texts with colors.
-    value = input("Enter first name: ").capitalize()
+    first_name = input("Enter first name: ").capitalize()
     # Opening JSON file
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
@@ -181,14 +180,13 @@ def search_employee():
     employees_found = []
 
     for emp in data:
-        if emp["first_name"] == value:
+        if emp["first_name"] == first_name:
             employees_found.append(emp)
-            print(f"We found {len(employees_found)} record with first name: {value}")
-            for x in employees_found:
-                print(x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
+    print(f"We found {len(employees_found)} records with first name: {first_name}")
+    for index, x in enumerate(employees_found, start=1):
+        print(index,".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
 
 
-#T11. Filter ticket by field/criteria -- Reusable function within another function: filter_tickets()
 
 
 
