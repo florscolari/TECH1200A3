@@ -171,6 +171,48 @@ def view_employees():
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
+def update_details():
+    work_email = input("Work email: ").lower()
+
+    # Opening JSON file
+    f = open("Current_Employees.json", "r")
+
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+
+    employee_found = False # to track if employee already exists -> new tool to me
+
+    for emp in data:
+        if emp["work_email"].lower() == work_email:
+            employee_found = True
+            print("What do you want to update?")
+            for key in emp.keys(): #displaying all possibles fields for an employee
+                print(f"{key}")
+
+            # user's selection
+            field_to_update = input("Enter the field name you want to update").lower()
+            if field_to_update in emp:
+                updated_value = input(f"Enter new value for {field_to_update}: ")
+                emp[field_to_update] = updated_value #updating value
+                print(f"{field_to_update} has been updated successfully.")
+            else:
+                print("Please enter a valid field name.")
+
+    if not employee_found:
+        print("No employee found.")
+
+    #Save updated value in JSON
+    with open("Current_Employees.json", "w") as f:
+        json.dump(data,f)
+
+    # reading and storing existing employees in a temporary list
+    with open("Current_Employees.json", "r") as file:
+        employees = json.load(file)
+
+    # writing all employees (current & new ones) on JSON file
+    with open("Current_Employees.json", "w") as file:
+        json.dump(employees, file)
+    file.close()
 
 def view_employee_details():
     first_name = input("First name: ").capitalize()
@@ -394,7 +436,7 @@ while True:
     elif userChoice == 4:
         view_employee_details()
     elif userChoice == 5:
-        print("TODO: Update employee details")
+        update_details()
     elif userChoice == 6:
         print("TODO: Delete an employee")
     elif userChoice == 7:
