@@ -171,6 +171,36 @@ def view_employees():
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
+def delete_employee():
+    work_email = input("Work email: ").lower()
+
+    # Opening JSON file
+    f = open("Current_Employees.json", "r")
+
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+
+    employee_found = False  # to track if employee already exists -> new tool to me
+
+    for emp in data:
+        if emp["work_email"].lower() == work_email:
+            employee_found = True
+            print(f"Do you want to remove {emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) from the current employee list? Y/N")
+            userConfirmation = input().upper()
+            if userConfirmation == "Y":
+                data = [emp for emp in data if emp["work_email"] != work_email]
+                print(f"{emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) has been removed from the employee list.")
+            elif userConfirmation == "N":
+                data = data
+            else:
+                print("Enter Y or N.")
+    if not employee_found:
+        print("No employee found.")
+
+    # Save updated list with -1 employee in JSON
+    with open("Current_Employees.json", "w") as file:
+        json.dump(data, file)
+    file.close()
 
 def update_details():
     work_email = input("Work email: ").lower()
@@ -205,16 +235,8 @@ def update_details():
         print("No employee found.")
 
     # Save updated value in JSON
-    with open("Current_Employees.json", "w") as f:
-        json.dump(data, f)
-
-    # reading and storing existing employees in a temporary list
-    with open("Current_Employees.json", "r") as file:
-        employees = json.load(file)
-
-    # writing all employees (current & new ones) on JSON file
     with open("Current_Employees.json", "w") as file:
-        json.dump(employees, file)
+        json.dump(data, file)
     file.close()
 
 
@@ -383,8 +405,8 @@ def add_employee():
 # Menu options - reusing structure from A2 TicketManagementSystem
 menuOptions = {
     1: "Search for an Employee",
-    2: "Add an employee",
-    3: "View current employees",
+    2: "Add an Employee",
+    3: "View Current Employee List",
     4: "View Employee Details",
     5: "Update Employee Details",
     6: "Delete an employee",
@@ -440,7 +462,7 @@ while True:
     elif userChoice == 5:
         update_details()
     elif userChoice == 6:
-        print("TODO: Delete an employee")
+        delete_employee()
     elif userChoice == 7:
         print("TODO: Sort Employees")
     elif userChoice == 8:
