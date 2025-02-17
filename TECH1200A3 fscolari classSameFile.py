@@ -2,7 +2,6 @@
 
 # ----- LIBRARIES / MODULES -----
 import json
-from dataclasses import field
 
 
 class Employee:
@@ -231,7 +230,7 @@ def employee_details(first_name, last_name, dob):
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
-    employees_found = []
+
 
     employees_found = [emp for emp in data if emp["first_name"] == first_name and emp["last_name"] == last_name and
                        emp["dob"] == dob]
