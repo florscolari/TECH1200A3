@@ -167,10 +167,44 @@ def view_employees():
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
+def check_duplicates(name, lastName, dob):
+    # Opening JSON file
+    f = open('Current_Employees.json')
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+    for emp in data:
+        while name == emp["first_name"].capitalize() and lastName == emp["last_name"].capitalize() and dob == emp["dob"]:
+            print(f"{name.capitalize()} {lastName.capitalize()} with date of birth: {dob} is already registered in the system")
+            userChoice = input("Press 1 to enter employee details again, or 2 to cancel this task")
 
+            while userChoice != "1" and userChoice != "2":
+                userChoice = input("Please choose between 1 to enter employee details again, or 2 to cancel this "
+                                     "task")
+            if userChoice == "1":
+                name = input("Enter employee's first name").capitalize()
+                lastName = input("Enter employee's last name").capitalize()
+                dob = input("Enter employee's date of birth (dd/mm/yyyy)")
+            elif userChoice == "2":
+                #todo: call main manu when is ready
+                break
 
-# -------- Running the application
+def add_employee():
+    """To add a new employee to the current list"""
+    print("Enter new employee details:")
+    name = input("Enter a name").capitalize()
+    lastName = input("Enter last name").capitalize()
+    dob = input("Enter employee's date of birth (dd/mm/yyyy)")
+
+    #Checkpoint to check duplicates - starts
+    check_duplicates(name, lastName, dob)
+    # Checkpoint to check duplicates - ends
+
+    print(name,lastName,dob)
+
+# ----- Run the program -------
 Employee.main()
+add_employee()
+#todo: user menu
 view_employees()
 
 # writing employees
