@@ -171,6 +171,7 @@ def view_employees():
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
+
 def update_details():
     work_email = input("Work email: ").lower()
 
@@ -180,13 +181,13 @@ def update_details():
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
 
-    employee_found = False # to track if employee already exists -> new tool to me
+    employee_found = False  # to track if employee already exists -> new tool to me
 
     for emp in data:
         if emp["work_email"].lower() == work_email:
             employee_found = True
             print("What do you want to update?")
-            for key in emp.keys(): #displaying all possibles fields for an employee
+            for key in emp.keys():  # displaying all possibles fields for an employee
                 key_user = key.lower().replace("_", " ")
                 print(f"{key_user}")
 
@@ -194,8 +195,8 @@ def update_details():
             field_to_update = input("Enter the field name you want to update").lower().replace(" ", "_")
             if field_to_update in emp:
                 updated_value = input(f"Enter new value for {field_to_update.lower().replace("_", " ")}: ")
-                field_to_update = field_to_update.lower().replace(" ", "_") #awful in repetition but working
-                emp[field_to_update] = updated_value #updating value
+                field_to_update = field_to_update.lower().replace(" ", "_")  # awful in repetition but working
+                emp[field_to_update] = updated_value  # updating value
                 print(f"{field_to_update.lower().replace("_", " ")} has been updated successfully.")
             else:
                 print("Please enter a valid field name.")
@@ -203,9 +204,9 @@ def update_details():
     if not employee_found:
         print("No employee found.")
 
-    #Save updated value in JSON
+    # Save updated value in JSON
     with open("Current_Employees.json", "w") as f:
-        json.dump(data,f)
+        json.dump(data, f)
 
     # reading and storing existing employees in a temporary list
     with open("Current_Employees.json", "r") as file:
@@ -215,6 +216,7 @@ def update_details():
     with open("Current_Employees.json", "w") as file:
         json.dump(employees, file)
     file.close()
+
 
 def view_employee_details():
     first_name = input("First name: ").capitalize()
@@ -230,7 +232,6 @@ def employee_details(first_name, last_name, dob):
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
-
 
     employees_found = [emp for emp in data if emp["first_name"] == first_name and emp["last_name"] == last_name and
                        emp["dob"] == dob]
@@ -396,8 +397,7 @@ menuOptions = {
 def welcome(userName):
     print("-" * 80)
     print("Welcome to Eminent,", userName.title(),
-          ".\n" """I am Ema, your Employee Management Asistant. \nLet's sort and organise some people together. What 
-          would you like to do next?""")
+          ".\n" """I am Ema, your Employee Management Assistant. \nLet's sort and organise some people together. What would you like to do next?""")
 
 
 def greeting_midway():
