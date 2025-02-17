@@ -1,4 +1,8 @@
 ## Start of the script - 1847863 F. Scolari KBS 2025 TECH1200 Assessment 3
+
+# ----- LIBRARIES / MODULES -----
+from rich.console import Console
+from rich.table import Table
 import json
 
 class Employee:
@@ -167,25 +171,46 @@ def view_employees():
                "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                "\nLocation: " + emp["location"]))
 
+def search_employee():
+     # To force to use a terminal that allows to display texts with colors.
+    value = input("Enter first name: ").capitalize()
+    # Opening JSON file
+    f = open('Current_Employees.json')
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+    employees_found = []
+
+    for emp in data:
+        if emp["first_name"] == value:
+            employees_found.append(emp)
+            print(f"We found {len(employees_found)} record with first name: {value}")
+            for x in employees_found:
+                print(x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
+
+
+#T11. Filter ticket by field/criteria -- Reusable function within another function: filter_tickets()
+
+
+
+
 def check_duplicates(name, lastName, dob):
     # Opening JSON file
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
     for emp in data:
-        while name == emp["first_name"].capitalize() and lastName == emp["last_name"].capitalize() and dob == emp["dob"]:
+        if name == emp["first_name"].capitalize() and lastName == emp["last_name"].capitalize() and dob == emp["dob"]:
             print(f"{name.capitalize()} {lastName.capitalize()} with date of birth: {dob} is already registered in the system")
-            userChoice = input("Press 1 to enter employee details again, or 2 to cancel this task")
 
-            while userChoice != "1" and userChoice != "2":
-                userChoice = input("Please choose between 1 to enter employee details again, or 2 to cancel this task")
+            while True:
+                userChoice = input("Press 1 to enter employee details again, or 2 to cancel this task")
 
-            if userChoice == "1":
-                return "retry"
-            elif userChoice == "2":
-                return "cancel"
-            else:
-                print("Please enter 1 to enter details again or 2 to cancel this task")
+                if userChoice == "1":
+                    return "retry"
+                elif userChoice == "2":
+                    return "cancel"
+                else:
+                    print("Please enter 1 to enter details again or 2 to cancel this task")
 
 
 
@@ -213,53 +238,50 @@ def add_employee():
         ## To handle either is returning duplicate True or False
         if duplicate_result == "cancel":
             print("Task has been cancelled.")
-            return
+            break
         elif duplicate_result == "retry":
             continue
         # Checkpoint to check duplicates - ends
 
-    #using the function to check the right data type
-    age = check_integer(input("Age: "))
+        #using the function to check the right data type
+        age = check_integer(input("Age: "))
 
-    position = input("Position: ").capitalize()
-    employment_type = input("Employment type (full-time, part-time, contractor): ").capitalize()
-    while employment_type != "Full-time" and employment_type != "Part-time" and employment_type != "Contractor":
-        print(f"You wrote: {employment_type}. Please enter: full-time, part-time or contractor")
-        employment_type = input().capitalize()
-
-
-    work_email = input("Work email: ")
-
-    salary = check_integer(input("Salary ($): "))
-    bank_account = check_integer(input("Bank account number: "))
+        position = input("Position: ").capitalize()
+        employment_type = input("Employment type (full-time, part-time, contractor): ").capitalize()
+        while employment_type != "Full-time" and employment_type != "Part-time" and employment_type != "Contractor":
+            print(f"You wrote: {employment_type}. Please enter: full-time, part-time or contractor")
+            employment_type = input().capitalize()
 
 
-    department = input("Department: ").capitalize()
-    location = input("Location: ").capitalize()
+        work_email = input("Work email: ")
+
+        salary = check_integer(input("Salary ($): "))
+        bank_account = check_integer(input("Bank account number: "))
+
+
+        department = input("Department: ").capitalize()
+        location = input("Location: ").capitalize()
 
     # storing values for the new employee in a list of dictionary/ies. Reusing the same as I used for multiple employees
-    new_employee = [
-        Employee(name, lastName, dob, age, position,
-                 employment_type, work_email, salary,
-                 bank_account, department, location),
-        ]
+        new_employee = [
+        Employee(name, lastName, dob, age, position, employment_type, work_email, salary, bank_account, department, location)]
 
-    # reading and storing existing employees in a temporary list
-    with open("Current_Employees.json", "r") as file:
-        employees = json.load(file)
+        # reading and storing existing employees in a temporary list
+        with open("Current_Employees.json", "r") as file:
+            employees = json.load(file)
 
-    # including this employee to the list (extracting dictionary from new_employee list)
-    employees.extend([emp.convert_to_dict() for emp in new_employee])
+        # including this employee to the list (extracting dictionary from new_employee list)
+        employees.extend([emp.convert_to_dict() for emp in new_employee])
 
-    # writing all employees (current & new ones) on JSON file
-    with open("Current_Employees.json", "w") as file:
-        json.dump(employees, file)
-    file.close()
+        # writing all employees (current & new ones) on JSON file
+        with open("Current_Employees.json", "w") as file:
+            json.dump(employees, file)
+        file.close()
 
-    # displaying success message
-    print("-"*80)
-    print("Employee has been added successfully! Employee:", name + " " + lastName)
-
+        # displaying success message
+        print("-"*80)
+        print("Employee has been added successfully! Employee:", name + " " + lastName)
+        break
 #Menu options - reusing structure from A2 TicketManagementSystem
 menuOptions = {
     1: "Search for an Employee",
@@ -308,7 +330,7 @@ while True:
     userChoice = main_menu()
 
     if userChoice == 1:
-        print("TODO: Search for an employee")
+        search_employee()
     elif userChoice == 2:
         add_employee()
     elif userChoice == 3:
