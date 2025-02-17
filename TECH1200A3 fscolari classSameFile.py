@@ -1,8 +1,6 @@
 ## Start of the script - 1847863 F. Scolari KBS 2025 TECH1200 Assessment 3
 
 # ----- LIBRARIES / MODULES -----
-from rich.console import Console
-from rich.table import Table
 import json
 
 class Employee:
@@ -172,22 +170,8 @@ def view_employees():
                "\nLocation: " + emp["location"]))
 
 
+
 def search_employee():
-    first_name = input("Enter first name: ").capitalize()
-    # Opening JSON file
-    f = open('Current_Employees.json')
-    # returns JSON object as a list that contains dictionary
-    data = json.load(f)
-    employees_found = []
-
-    for emp in data:
-        if emp["first_name"] == first_name:
-            employees_found.append(emp)
-    print(f"We found {len(employees_found)} records with first name: {first_name}")
-    for index, x in enumerate(employees_found, start=1):
-        print(index,".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
-
-def search_employee_():
     field = input("Enter 1 for first name or 2 for last name: ").capitalize()
     if field == "1":
         field = "first_name"
@@ -240,8 +224,6 @@ def check_duplicates(name, lastName, dob):
                     return "cancel"
                 else:
                     print("Please enter 1 to enter details again or 2 to cancel this task")
-
-
 
 #To check int user inputs (e.g. age and salary)
 def check_integer(attribute):
@@ -325,7 +307,7 @@ menuOptions = {
 
 
 #T01. Welcome & Get the user's name
-def welcome(username):
+def welcome(userName):
     print("-" * 80)
     print("Welcome to Eminent,", userName.title(),".\n"
     """I am Ema, your Employee Management Asistant. \nLet's sort and organise some people together. What would you like to do next?""")
@@ -359,7 +341,7 @@ while True:
     userChoice = main_menu()
 
     if userChoice == 1:
-        search_employee_()
+        search_employee()
     elif userChoice == 2:
         add_employee()
     elif userChoice == 3:
