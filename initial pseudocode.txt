@@ -5,6 +5,12 @@ CLASS Employee
     PRIVATE salary
     PUBLIC department
     PUBLIC location
+-------
+#TODO: document this
+    PRIVATE DOB
+    PRIVATE bank_account
+    PUBLIC employment_type
+    PUBLIC work_email
 
 FUNCTION Constructor(name, age, position, salary, department, location)
     SET self.name = name

@@ -1,5 +1,3 @@
-from tkinter.font import names
-
 from Employee import Employee
 import json
 
@@ -27,42 +25,51 @@ def read_current_employees():
     with open('Current_Employees.json', 'r') as file:
         data = json.load(file)
 
-#todo: function ADD employee
 def add_employee():
     """Asking user for values to add an employee"""
+
+    # Reading the current employees from the file and allocating temporary in nested dict
+    with open('Current_Employees.json', 'r') as file:
+        employee_list = json.load(file)
+
     print("Enter new employee details:")
     empId = input("Enter an ID")
     name = input("Enter a name")
+
+    # TODO: check for duplicates on the dictionary.
+
+        print("this employee already exist try again")
+        name = input("enter another name")
+    # I could bring the data as a dictionary: using get? and then use conditionals but HOW?!
+
     age = int(input("enter age"))
     salary = int(input("enter salary"))
     department = input("Enter a department")
     position = input("Enter a position")
     location = input("Enter a location")
+
+    """formatting user inputs as dictionary"""
     newEmployee = {
         empId:vars(Employee(name,age,salary, department, position, location))}
 
-
-    #TODO: check for duplicates on a file (no idea how to do it)
-
-    #Reading the current employees from the file and allocating temporary in nested dict
-    with open('Current_Employees.json', 'r') as file:
-        employee_list = json.load(file)
-
+    #TODO: read more about how I can retrieve data from file and store it in a dictionary
     #Adding the new employee to the list before writing the file
     employee_list.update(newEmployee)
 
     #Adding the updated list to the file
     write_employees(employee_list)
 
-#todo function VIEW all employees
 def view_employees():
-    """to check the content on json file"""
+    """to read the content on json file"""
     with open('Current_Employees.json', 'r') as file:
         employee_list = json.load(file)
     for emp in employee_list.items():
         print(emp)
 
+
 #--------- Calling functions to display to the user -----
+    #todo: use __str__ to display nicely employees
+
 initial_employees()
 add_employee()
 view_employees()
