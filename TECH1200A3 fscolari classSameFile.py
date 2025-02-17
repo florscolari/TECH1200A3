@@ -1,4 +1,6 @@
 import json
+
+
 class Employee:
     """To use as a blueprint to have employee objects"""
     __first_name: str
@@ -99,10 +101,14 @@ class Employee:
         self.location = location
 
     def __str__(self):
-        return ("\n---------------------- "+ "\nName: " + self.__first_name + " " + self.__last_name + "\nDate of Birth: " + str(self.__dob) + "\nAge: " + str(self.__age) + " Years old" + "\nPosition: " + self.__position + "\nEmployment Type: " +
-                self.employment_type + "\nWork Email: " + self.work_email + "\nSalary: $" + str(float(self.__salary)) +
-                "\nBank Account: " + str(self.__bank_account) + "\nDepartment: " + self.department +
-                 "\nLocation: " + self.location)
+        return (
+                    "\n---------------------- " + "\nName: " + self.__first_name + " " + self.__last_name + "\nDate of Birth: " + str(
+                self.__dob) + "\nAge: " + str(
+                self.__age) + " Years old" + "\nPosition: " + self.__position + "\nEmployment Type: " +
+                    self.employment_type + "\nWork Email: " + self.work_email + "\nSalary: $" + str(
+                float(self.__salary)) +
+                    "\nBank Account: " + str(self.__bank_account) + "\nDepartment: " + self.department +
+                    "\nLocation: " + self.location)
 
     def convert_to_dict(self):
         """To convert an employee class object to a dictionary"""
@@ -118,51 +124,68 @@ class Employee:
             "bank_account": self.get_bank_account(),
             "department": self.get_department(),
             "location": self.get_location()
-       }
+        }
+
     # creating static function main() for creating and using objects from 'Employee' class
     @staticmethod
     def main():
         """initialise the class with 4 employees"""
         employees = [
             Employee("Alice", "Anton", "12/12/2002", 23, "Admin",
-                            "Full-time", "aanton@company.com", 67000,
-                            "66001000123456", "Sales", "Perth"),
+                     "Full-time", "aanton@company.com", 67000,
+                     "66001000123456", "Sales", "Perth"),
             Employee("Betty", "Bloom", "16/07/1988", 36, "Support Analyst",
-                            "Full-time", "bblooom@company.com", 70000,
-                            "66001000123434", "Support", "Sydney"),
+                     "Full-time", "bblooom@company.com", 70000,
+                     "66001000123434", "Support", "Sydney"),
             Employee("Caleb", "Connor", "10/02/1987", 38, "Web Developer",
-                            "Full-time", "cconnor@company.com",
-                            130000, "66001000123423", "IT", "Dunsborough"),
+                     "Full-time", "cconnor@company.com",
+                     130000, "66001000123423", "IT", "Dunsborough"),
             Employee("Denton", "Dallas", "04/01/1977", 48, "Infrastructure Consultant",
-                        "Part-time", "ddallas@company.com",
-                        155000, "66001000127621", "IT", "Perth")
-            ]
+                     "Part-time", "ddallas@company.com",
+                     155000, "66001000127621", "IT", "Perth")
+        ]
         with open('Current_Employees.json', 'w') as file:
-        #I cannot use dict methods on a list, but I can use a for loop to use the convert to dict function on each
-        # list item
+            # I cannot use dict methods on a list, but I can use a for loop to use the convert to dict function on each
+            # list item
             json.dump([emp.convert_to_dict() for emp in employees], file)
         file.close()
 
-# running the application
+
+# ----- Functions -----
+def view_employees():
+    # Opening JSON file
+    f = open('Current_Employees.json')
+
+    # returns JSON object as a list that contains dictionary
+    #TODO: I could use table styles from Rich library to present the employee list. NICE TO HAVE
+    data = json.load(f)
+    for emp in data:
+        print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
+            "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
+               "\nPosition: " + emp["position"] + "\nEmployment Type: " +
+               emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(float(emp["salary"])) +
+               "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
+               "\nLocation: " + emp["location"]))
+
+
+
+# -------- Running the application
 Employee.main()
+view_employees()
 
-
-
-
-
-
-#writing employees
-#To error handling I have to use IOE error script
+# writing employees
+# To error handling I have to use IOE error script
 """If the file exists, then go and perform the action (r/w/a)
-    caseDISPLAY: read the file and display data -> it could be a function to invoke here
-    caseAPPEND:
-        if name AND lastName already exists
-            "This employee already exists"
-        else 
-            append employee
-            display successful message
-else: create the file (w)
-"""
+            caseDISPLAY: read the file and display data -> it could be a function to invoke here
+            caseAPPEND:
+                if name AND lastName already exists
+                    "This employee already exists"
+                else 
+                    append employee
+                    display successful message
+        else: create the file (w)
+        """
+
 
 def add_employees():
     """To add employees to the current employee list"""
