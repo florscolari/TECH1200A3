@@ -2,6 +2,7 @@
 
 # ----- LIBRARIES / MODULES -----
 import json
+from dataclasses import field
 
 
 class Employee:
@@ -187,14 +188,16 @@ def update_details():
             employee_found = True
             print("What do you want to update?")
             for key in emp.keys(): #displaying all possibles fields for an employee
-                print(f"{key}")
+                key_user = key.lower().replace("_", " ")
+                print(f"{key_user}")
 
             # user's selection
-            field_to_update = input("Enter the field name you want to update").lower()
+            field_to_update = input("Enter the field name you want to update").lower().replace(" ", "_")
             if field_to_update in emp:
-                updated_value = input(f"Enter new value for {field_to_update}: ")
+                updated_value = input(f"Enter new value for {field_to_update.lower().replace("_", " ")}: ")
+                field_to_update = field_to_update.lower().replace(" ", "_") #awful in repetition but working
                 emp[field_to_update] = updated_value #updating value
-                print(f"{field_to_update} has been updated successfully.")
+                print(f"{field_to_update.lower().replace("_", " ")} has been updated successfully.")
             else:
                 print("Please enter a valid field name.")
 
