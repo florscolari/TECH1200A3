@@ -154,127 +154,43 @@ class Employee:
         file.close()
 
 
+# ----- DATA STRUCTURES -----
+# Menu options - reusing structure from A2 Ticket Management System
+menuOptions = {
+    1: "Search for an Employee",
+    2: "Add an Employee",
+    3: "View Current Employee List",
+    4: "View Employee Details",
+    5: "Update Employee Details",
+    6: "Delete an employee",
+    7: "Sort Employees",
+    8: "Exit the program"
+}
+
+
 # ----- Functions -----
-def view_employees():
-    """to display all employees available on JSON & treated as a list of dictionaries"""
-    # Opening JSON file
-    f = open('Current_Employees.json')
 
-    # returns JSON object as a list that contains dictionaries, 1 for each employee
-    data = json.load(f)
-    for emp in data:
-        print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
-            "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
-               "\nPosition: " + emp["position"] + "\nEmployment Type: " +
-               emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
-                    float(emp["salary"])) +
-               "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
-               "\nLocation: " + emp["location"]))
-
-def delete_employee():
-    """to delete an employee & get it by its work email as 1 input-only identifier"""
-    work_email = input("Work email: ").lower()
-
-    # Opening JSON file
-    f = open("Current_Employees.json", "r")
-
-    # returns JSON object as a list that contains dictionaries
-    data = json.load(f)
-
-    employee_found = False  # to track if employee already exists -> new tool to me
-
-    for emp in data:
-        if emp["work_email"].lower() == work_email:
-            employee_found = True
-            print(f"Do you want to remove {emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) from the current employee list? Y/N")
-            userConfirmation = input().upper() #Confirmation before deleting employee
-            if userConfirmation == "Y":
-                data = [emp for emp in data if emp["work_email"] != work_email]
-                print(f"{emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) has been removed from the employee list.")
-            elif userConfirmation == "N":
-                data = data
-            else:
-                print("Enter Y or N.")
-    if not employee_found:
-        print("No employee found.")
-
-    # Save updated list with -1 employee in JSON
-    with open("Current_Employees.json", "w") as file:
-        json.dump(data, file)
-    file.close()
-
-def update_details():
-    """to update employee details: get it first by its work email & ask which field wanted to be updated"""
-    work_email = input("Work email: ").lower()
-
-    # Opening JSON file
-    f = open("Current_Employees.json", "r")
-
-    # returns JSON object as a list that contains dictionary
-    data = json.load(f)
-
-    employee_found = False  # to track if employee already exists -> new tool to me
-
-    for emp in data:
-        if emp["work_email"].lower() == work_email:
-            employee_found = True
-            print("What do you want to update?")
-            for key in emp.keys():  # displaying all possibles fields for an employee
-                key_user = key.lower().replace("_", " ")
-                print(f"{key_user}")
-
-            # user's selection
-            field_to_update = input("Enter the field name you want to update").lower().replace(" ", "_")
-            if field_to_update in emp:
-                updated_value = input(f"Enter new value for {field_to_update.lower().replace("_", " ")}: ")
-                field_to_update = field_to_update.lower().replace(" ", "_")  # awful in repetition but working
-                emp[field_to_update] = updated_value  # updating value
-                print(f"{field_to_update.lower().replace("_", " ")} has been updated successfully.")
-            else:
-                print("Please enter a valid field name.")
-
-    if not employee_found:
-        print("No employee found.")
-
-    # Save updated value in JSON
-    with open("Current_Employees.json", "w") as file:
-        json.dump(data, file)
-    file.close()
+# T01. Welcome & Get the user's name - reusing A2
+def welcome(userName):
+    """To welcome the user when starting the program"""
+    print("-" * 80)
+    print("Welcome to Eminent,", userName.title(),
+          ".\n" """I am Ema, your Employee Management Assistant. \nLet's sort and organise some people together. What would you like to do next?""")
 
 
-def view_employee_details():
-    """To display all data available for an employee"""
-    # set of 3 values to identify an employee uniquely. It is time-consuming (sorry) but working without ID or validation on email.
-    first_name = input("First name: ").capitalize()
-    last_name = input("Last name: ").capitalize()
-    dob = input("Date of birth (dd/mm/yyyy): ")
+# T02. Display the main menu
+def main_menu():
+    """To display the main menu to the user"""
+    print("-" * 80)
+    for number, task in menuOptions.items():
+        print("[", number, "] :", task)
+    userMenuChoice = check_integer(input("Choose a number: "))
+    while userMenuChoice < 1 or userMenuChoice > 8:  # Checking that is a numeric value within the expected range
+        print("Choose a valid number between 1 and 8 please.")
+        userMenuChoice = int(input("Choose a number: "))
+    return userMenuChoice
 
-    # Checkpoint for employee details
-    employee_details(first_name, last_name, dob)
-
-
-def employee_details(first_name, last_name, dob):
-    """set of values needed to check for an employee that meets that criteria and display all its data"""
-    # Opening JSON file
-    f = open('Current_Employees.json')
-    # returns JSON object as a list that contains dictionary
-    data = json.load(f)
-
-    employees_found = [emp for emp in data if emp["first_name"] == first_name and emp["last_name"] == last_name and
-                       emp["dob"] == dob]
-    if employees_found:
-        for emp in employees_found:
-            print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
-                "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
-                   "\nPosition: " + emp["position"] + "\nEmployment Type: " +
-                   emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
-                        float(emp["salary"])) +
-                   "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
-                   "\nLocation: " + emp["location"]))
-    else:
-        print("No employee has been found.")
-
-
+#T03.01 Search for an employee
 def search_employee():
     """to search for an employee by: first name, last name or work email"""
     field = input("Enter 1 for first name, 2 for last name or 3 for work email: ").capitalize()
@@ -295,76 +211,7 @@ def search_employee():
         print("select a valid option: 1, 2 or 3")
     search_employees_by(field, value)
 
-def field_to_field_user(field):
-    """to display the field name to the user in a readable-friendly way. e.g no "_" """
-    field_user = field.lower().replace("_", " ")
-    return field_user
-
-def get_salary(emp):
-    """To pass a valid argument for sorting by salary to sort method used to sort the employee list."""
-    return emp["salary"]  # the key argument expected on sort() is a function, not a string.
-                        # So with this function, I hope to return the value for salary from each dictionary in the list
-
-def get_position(emp):
-    """To pass a valid argument for sorting by position to sort method used to sort the employee list."""
-    return emp["position"] #same use as salary but now for positions.
-
-def sort_employees():
-    """to sort employees by position or by salary, and by A-Z or Z-A"""
-    # Opening JSON file
-    f = open('Current_Employees.json')
-
-    # returns JSON object as a list that contains dictionary
-    data = json.load(f)
-    employees_found = []
-    f.close()
-
-    for emp in data:
-            employees_found.append(emp)
-
-    print("Choose sorting criteria: 1 - Salary or 2 - Position")
-    sorting_by_field = input()
-
-    while sorting_by_field != "1" and sorting_by_field != "2":
-        print("Please enter a valid choice. 1 for salary or 2 for position")
-        sorting_by_field = input()
-
-    print("Choose sorting order: \n A - Ascending (A-Z - Lowest to highest) \n Z - Descending (Z-A - Highest to "
-          "lowest )")
-    sort_order = input().upper()
-
-    while sort_order != "A" and sort_order != "Z":
-        print("Please enter a valid choice. A or Z.")
-        sort_order = input().upper()
-
-    if sorting_by_field == "1":
-        user_field = "Salary"
-        if sort_order == "A":
-            user_order = "A-Z"
-            employees_found.sort(key=get_salary) #It doesn't accept a string, must be a function
-        else:
-            user_order = "Z-A"
-            employees_found.sort(key=get_salary,reverse=True)
-
-    if sorting_by_field == "2":
-        user_field = "Position"
-        if sort_order == "A":
-            user_order = "A-Z"
-            employees_found.sort(key=get_position) #It doesn't accept a string, must be a function
-        else:
-            user_order = "Z-A"
-            employees_found.sort(key=get_position,reverse=True)
-
-    print(f"{len(employees_found)} employees sorted by {user_field} in {user_order} order.")
-    for emp in employees_found:
-        print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
-                "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
-                   "\nPosition: " + emp["position"] + "\nEmployment Type: " +
-                   emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
-                        float(emp["salary"])) +
-                   "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
-                   "\nLocation: " + emp["location"]))
-
+#T03.02 Search employee by
 def search_employees_by(field, value):
     """to get & display employees who match field and value"""
     # Opening JSON file
@@ -383,6 +230,13 @@ def search_employees_by(field, value):
     for index, x in enumerate(employees_found, start=1):
         print(index, ".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
 
+
+def field_to_field_user(field):
+    """to display the field name to the user in a readable-friendly way. e.g no "_" """
+    field_user = field.lower().replace("_", " ")
+    return field_user
+
+#T04.01
 def check_duplicates(first_name, last_name, dob):
     """to get first name, last name and dob from adding an employee & check if a record doesn't exist already in the list"""
 
@@ -406,9 +260,7 @@ def check_duplicates(first_name, last_name, dob):
                     return "cancel"
                 else:
                     print("Please enter 1 to enter details again or 2 to cancel this task")
-
-
-
+#T04.02
 def check_integer(attribute):
     """To check integer data type in user inputs (e.g. age and salary)"""
     while not attribute.isnumeric():
@@ -416,7 +268,7 @@ def check_integer(attribute):
         attribute = input()
     return int(attribute)
 
-
+#T04. Add an employee
 def add_employee():
     """To get the user inputs & append a new employee to the current list"""
     print("-" * 80)
@@ -477,42 +329,197 @@ def add_employee():
         print(f"Employee {first_name} {last_name} has been added successfully.")
         break
 
+# T05. View employee list
+def view_employees():
+    """to display all employees available on JSON & treated as a list of dictionaries"""
+    # Opening JSON file
+    f = open('Current_Employees.json')
 
-# Menu options - reusing structure from A2 Ticket Management System
-menuOptions = {
-    1: "Search for an Employee",
-    2: "Add an Employee",
-    3: "View Current Employee List",
-    4: "View Employee Details",
-    5: "Update Employee Details",
-    6: "Delete an employee",
-    7: "Sort Employees",
-    8: "Exit the program"
-}
+    # returns JSON object as a list that contains dictionaries, 1 for each employee
+    data = json.load(f)
+    for emp in data:
+        print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
+            "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
+               "\nPosition: " + emp["position"] + "\nEmployment Type: " +
+               emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
+                    float(emp["salary"])) +
+               "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
+               "\nLocation: " + emp["location"]))
+
+#T06.01
+def view_employee_details():
+    """To display all data available for an employee"""
+    # set of 3 values to identify an employee uniquely. It is time-consuming (sorry) but working without ID or validation on email.
+    first_name = input("First name: ").capitalize()
+    last_name = input("Last name: ").capitalize()
+    dob = input("Date of birth (dd/mm/yyyy): ")
+
+    # Checkpoint for employee details
+    employee_details(first_name, last_name, dob)
+
+#T06.02
+def employee_details(first_name, last_name, dob):
+    """set of values needed to check for an employee that meets that criteria and display all its data"""
+    # Opening JSON file
+    f = open('Current_Employees.json')
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+
+    employees_found = [emp for emp in data if emp["first_name"] == first_name and emp["last_name"] == last_name and
+                       emp["dob"] == dob]
+    if employees_found:
+        for emp in employees_found:
+            print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
+                "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
+                   "\nPosition: " + emp["position"] + "\nEmployment Type: " +
+                   emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
+                        float(emp["salary"])) +
+                   "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
+                   "\nLocation: " + emp["location"]))
+    else:
+        print("No employee has been found.")
+
+#T07. Update employee details
+def update_details():
+    """to update employee details: get it first by its work email & ask which field wanted to be updated"""
+    work_email = input("Work email: ").lower()
+
+    # Opening JSON file
+    f = open("Current_Employees.json", "r")
+
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+
+    employee_found = False  # to track if employee already exists -> new tool to me
+
+    for emp in data:
+        if emp["work_email"].lower() == work_email:
+            employee_found = True
+            print("What do you want to update?")
+            for key in emp.keys():  # displaying all possibles fields for an employee
+                key_user = key.lower().replace("_", " ")
+                print(f"{key_user}")
+
+            # user's selection
+            field_to_update = input("Enter the field name you want to update").lower().replace(" ", "_")
+            if field_to_update in emp:
+                updated_value = input(f"Enter new value for {field_to_update.lower().replace("_", " ")}: ")
+                field_to_update = field_to_update.lower().replace(" ", "_")  # awful in repetition but working
+                emp[field_to_update] = updated_value  # updating value
+                print(f"{field_to_update.lower().replace("_", " ")} has been updated successfully.")
+            else:
+                print("Please enter a valid field name.")
+
+    if not employee_found:
+        print("No employee found.")
+
+    # Save updated value in JSON
+    with open("Current_Employees.json", "w") as file:
+        json.dump(data, file)
+    file.close()
+
+#08. Delete an employee
+def delete_employee():
+    """to delete an employee & get it by its work email as 1 input-only identifier"""
+    work_email = input("Work email: ").lower()
+
+    # Opening JSON file
+    f = open("Current_Employees.json", "r")
+
+    # returns JSON object as a list that contains dictionaries
+    data = json.load(f)
+
+    employee_found = False  # to track if employee already exists -> new tool to me
+
+    for emp in data:
+        if emp["work_email"].lower() == work_email:
+            employee_found = True
+            print(f"Do you want to remove {emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) from the current employee list? Y/N")
+            userConfirmation = input().upper() #Confirmation before deleting employee
+            if userConfirmation == "Y":
+                data = [emp for emp in data if emp["work_email"] != work_email]
+                print(f"{emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) has been removed from the employee list.")
+            elif userConfirmation == "N":
+                data = data
+            else:
+                print("Enter Y or N.")
+    if not employee_found:
+        print("No employee found.")
+
+    # Save updated list with -1 employee in JSON
+    with open("Current_Employees.json", "w") as file:
+        json.dump(data, file)
+    file.close()
+
+#09.02
+def get_salary(emp):
+    """To pass a valid argument for sorting by salary to sort method used to sort the employee list."""
+    return emp["salary"]  # the key argument expected on sort() is a function, not a string.
+                        # So with this function, I hope to return the value for salary from each dictionary in the list
+#09. 03
+def get_position(emp):
+    """To pass a valid argument for sorting by position to sort method used to sort the employee list."""
+    return emp["position"] #same use as salary but now for positions.
+
+#09. Sorting employees
+def sort_employees():
+    """to sort employees by position or by salary, and by A-Z or Z-A"""
+    # Opening JSON file
+    f = open('Current_Employees.json')
+
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+    employees_found = []
+    f.close()
+
+    for emp in data:
+            employees_found.append(emp)
+
+    print("Choose sorting criteria: 1 - Salary or 2 - Position")
+    sorting_by_field = input()
+
+    while sorting_by_field != "1" and sorting_by_field != "2":
+        print("Please enter a valid choice. 1 for salary or 2 for position")
+        sorting_by_field = input()
+
+    print("Choose sorting order: \n A - Ascending (A-Z - Lowest to highest) \n Z - Descending (Z-A - Highest to "
+          "lowest )")
+    sort_order = input().upper()
+
+    while sort_order != "A" and sort_order != "Z":
+        print("Please enter a valid choice. A or Z.")
+        sort_order = input().upper()
+
+    if sorting_by_field == "1":
+        user_field = "Salary"
+        if sort_order == "A":
+            user_order = "A-Z"
+            employees_found.sort(key=get_salary) #It doesn't accept a string, must be a function
+        else:
+            user_order = "Z-A"
+            employees_found.sort(key=get_salary,reverse=True)
+
+    if sorting_by_field == "2":
+        user_field = "Position"
+        if sort_order == "A":
+            user_order = "A-Z"
+            employees_found.sort(key=get_position) #It doesn't accept a string, must be a function
+        else:
+            user_order = "Z-A"
+            employees_found.sort(key=get_position,reverse=True)
+
+    print(f"{len(employees_found)} employees sorted by {user_field} in {user_order} order.")
+    for emp in employees_found:
+        print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
+                "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
+                   "\nPosition: " + emp["position"] + "\nEmployment Type: " +
+                   emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
+                        float(emp["salary"])) +
+                   "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
+                   "\nLocation: " + emp["location"]))
 
 
-# Welcome & Get the user's name - reusing A2
-def welcome(userName):
-    """To welcome the user when starting the program"""
-    print("-" * 80)
-    print("Welcome to Eminent,", userName.title(),
-          ".\n" """I am Ema, your Employee Management Assistant. \nLet's sort and organise some people together. What would you like to do next?""")
-
-
-# Display the main menu
-def main_menu():
-    """To display the main menu to the user"""
-    print("-" * 80)
-    for number, task in menuOptions.items():
-        print("[", number, "] :", task)
-    userMenuChoice = check_integer(input("Choose a number: "))
-    while userMenuChoice < 1 or userMenuChoice > 8:  # Checking that is a numeric value within the expected range
-        print("Choose a valid number between 1 and 8 please.")
-        userMenuChoice = int(input("Choose a number: "))
-    return userMenuChoice
-
-
-# ----- Runinng the program -------
+# ----- Running the program -------
 
 # Initialisation with 4 current employees added to JSON - Current_Employees.json
 Employee.main()
