@@ -293,7 +293,7 @@ def search_employee():
         # lower and capitalise treatments at this point
     else:
         print("select a valid option: 1, 2 or 3")
-    search_employee_by(field, value)
+    search_employees_by(field, value)
 
 def field_to_field_user(field):
     """to display the field name to the user in a readable-friendly way. e.g no "_" """
@@ -365,15 +365,17 @@ def sort_employees():
                    "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                    "\nLocation: " + emp["location"]))
 
-
-def search_employee_by(field, value):
-
+def search_employees_by(field, value):
+    """to get & display employees who match field and value"""
     # Opening JSON file
     f = open('Current_Employees.json')
+
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
     employees_found = []
+
     field_user = field_to_field_user(field)
+
     for emp in data:
         if emp[field] == value:
             employees_found.append(emp)
@@ -381,10 +383,12 @@ def search_employee_by(field, value):
     for index, x in enumerate(employees_found, start=1):
         print(index, ".", x["first_name"], x["last_name"], x["dob"], x["position"], x["work_email"], x["location"])
 
-
 def check_duplicates(first_name, last_name, dob):
+    """to get first name, last name and dob from adding an employee & check if a record doesn't exist already in the list"""
+
     # Opening JSON file
     f = open('Current_Employees.json')
+
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
     for emp in data:
@@ -404,8 +408,9 @@ def check_duplicates(first_name, last_name, dob):
                     print("Please enter 1 to enter details again or 2 to cancel this task")
 
 
-# To check int user inputs (e.g. age and salary)
+
 def check_integer(attribute):
+    """To check integer data type in user inputs (e.g. age and salary)"""
     while not attribute.isnumeric():
         print("Please enter a valid numeric value")
         attribute = input()
@@ -413,7 +418,7 @@ def check_integer(attribute):
 
 
 def add_employee():
-    """To add a new employee to the current list"""
+    """To get the user inputs & append a new employee to the current list"""
     print("-" * 80)
     print("Enter details for the new employee: ")
     while True:
@@ -422,8 +427,7 @@ def add_employee():
         dob = input("Date of birth (dd/mm/yyyy): ")
 
         # Checkpoint to check duplicates - starts
-        duplicate_result = check_duplicates(first_name, last_name,
-                                            dob)  # checking for duplicates. If duplicate is True,
+        duplicate_result = check_duplicates(first_name, last_name, dob)  # checking for duplicates. If duplicate is True,
         # it is coming back with a decision to retry or cancel
 
         ## To handle either is returning duplicate True or False
@@ -474,7 +478,7 @@ def add_employee():
         break
 
 
-# Menu options - reusing structure from A2 TicketManagementSystem
+# Menu options - reusing structure from A2 Ticket Management System
 menuOptions = {
     1: "Search for an Employee",
     2: "Add an Employee",
@@ -487,20 +491,17 @@ menuOptions = {
 }
 
 
-# T01. Welcome & Get the user's name
+# Welcome & Get the user's name - reusing A2
 def welcome(userName):
+    """To welcome the user when starting the program"""
     print("-" * 80)
     print("Welcome to Eminent,", userName.title(),
           ".\n" """I am Ema, your Employee Management Assistant. \nLet's sort and organise some people together. What would you like to do next?""")
 
 
-def greeting_midway():
-    print("-" * 80)
-    print("What would you like to do next?")
-
-
-# T02. Display the main menu
+# Display the main menu
 def main_menu():
+    """To display the main menu to the user"""
     print("-" * 80)
     for number, task in menuOptions.items():
         print("[", number, "] :", task)
@@ -511,17 +512,17 @@ def main_menu():
     return userMenuChoice
 
 
-# ----- Run the program -------
+# ----- Runinng the program -------
 
 # Initialisation with 4 current employees added to JSON - Current_Employees.json
 Employee.main()
 
-# The main menu on a loop to run the program
 print("You are just about to access to the Company's Employee Management System")
 userName = input("Enter your name to start: ")
 welcome(userName)
+
 while True:
-    userChoice = main_menu()
+    userChoice = main_menu() # The main menu on a loop to run the program
 
     if userChoice == 1:
         search_employee()
