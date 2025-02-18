@@ -289,14 +289,15 @@ def search_employee():
         print("select a valid option: 1, 2 or 3")
     search_employee_by(field, value)
 
-
 def field_to_field_user(field):
     field_user = field.lower().replace("_", " ")
     return field_user
 
 def get_salary(emp):
-    return emp["salary"]  # Extract salary value from each employee
-
+    return emp["salary"]  # the key argument expected on sort() is a function, not a string.
+                        # So with this function, I hope to return the value for salary from each dictionary in the list
+def get_position(emp):
+    return emp["position"] #same use as salary but now for positions.
 
 def sort_employees():
     # Opening JSON file
@@ -315,8 +316,8 @@ def sort_employees():
         print("Please enter a valid choice. 1 for salary or 2 for position")
         sorting_by_field = input()
 
-    print("Choose sorting order: \n A - Ascending (A-Z - Lowest to highest \n Z - Descending (Z-A - Highest to "
-          "lowest")
+    print("Choose sorting order: \n A - Ascending (A-Z - Lowest to highest) \n Z - Descending (Z-A - Highest to "
+          "lowest )")
     sort_order = input().upper()
 
     while sort_order != "A" and sort_order != "Z":
@@ -332,6 +333,14 @@ def sort_employees():
             user_order = "Z-A"
             employees_found.sort(key=get_salary,reverse=True)
 
+    if sorting_by_field == "2":
+        user_field = "Position"
+        if sort_order == "A":
+            user_order = "A-Z"
+            employees_found.sort(key=get_position) #It doesn't accept a string, must be a function
+        else:
+            user_order = "Z-A"
+            employees_found.sort(key=get_position,reverse=True)
 
     print(f"{len(employees_found)} employees sorted by {user_field} in {user_order} order.")
     for emp in employees_found:
@@ -342,8 +351,6 @@ def sort_employees():
                         float(emp["salary"])) +
                    "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
                    "\nLocation: " + emp["location"]))
-
-
 
 
 def search_employee_by(field, value):
