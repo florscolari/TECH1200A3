@@ -187,7 +187,7 @@ def main_menu():
     userMenuChoice = check_integer(input("Choose a number: "))
     while userMenuChoice < 1 or userMenuChoice > 8:  # Checking that is a numeric value within the expected range
         print("Choose a valid number between 1 and 8 please.")
-        userMenuChoice = int(input("Choose a number: "))
+        userMenuChoice = check_integer(input("Choose a number: "))
     return userMenuChoice
 
 #T03.01 Search for an employee
