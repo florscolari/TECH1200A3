@@ -3,7 +3,7 @@
 # ----- LIBRARIES / MODULES -----
 import json
 
-
+# ----- CLASS (only 1 class defined on this file) -----
 class Employee:
     """To use as a blueprint to have employee objects"""
     __first_name: str
@@ -156,11 +156,11 @@ class Employee:
 
 # ----- Functions -----
 def view_employees():
+    """to display all employees available on JSON & treated as a list of dictionaries"""
     # Opening JSON file
     f = open('Current_Employees.json')
 
-    # returns JSON object as a list that contains dictionary
-    # TODO: I could use table styles from Rich library to present the employee list. NICE TO HAVE
+    # returns JSON object as a list that contains dictionaries, 1 for each employee
     data = json.load(f)
     for emp in data:
         print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
@@ -172,12 +172,13 @@ def view_employees():
                "\nLocation: " + emp["location"]))
 
 def delete_employee():
+    """to delete an employee & get it by its work email as 1 input-only identifier"""
     work_email = input("Work email: ").lower()
 
     # Opening JSON file
     f = open("Current_Employees.json", "r")
 
-    # returns JSON object as a list that contains dictionary
+    # returns JSON object as a list that contains dictionaries
     data = json.load(f)
 
     employee_found = False  # to track if employee already exists -> new tool to me
@@ -186,7 +187,7 @@ def delete_employee():
         if emp["work_email"].lower() == work_email:
             employee_found = True
             print(f"Do you want to remove {emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) from the current employee list? Y/N")
-            userConfirmation = input().upper()
+            userConfirmation = input().upper() #Confirmation before deleting employee
             if userConfirmation == "Y":
                 data = [emp for emp in data if emp["work_email"] != work_email]
                 print(f"{emp["first_name"]} {emp["last_name"]} ({emp["work_email"]}) has been removed from the employee list.")
@@ -203,6 +204,7 @@ def delete_employee():
     file.close()
 
 def update_details():
+    """to update employee details: get it first by its work email & ask which field wanted to be updated"""
     work_email = input("Work email: ").lower()
 
     # Opening JSON file
@@ -241,6 +243,8 @@ def update_details():
 
 
 def view_employee_details():
+    """To display all data available for an employee"""
+    # set of 3 values to identify an employee uniquely. It is time-consuming (sorry) but working without ID or validation on email.
     first_name = input("First name: ").capitalize()
     last_name = input("Last name: ").capitalize()
     dob = input("Date of birth (dd/mm/yyyy): ")
@@ -250,6 +254,7 @@ def view_employee_details():
 
 
 def employee_details(first_name, last_name, dob):
+    """set of values needed to check for an employee that meets that criteria and display all its data"""
     # Opening JSON file
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
@@ -271,6 +276,7 @@ def employee_details(first_name, last_name, dob):
 
 
 def search_employee():
+    """to search for an employee by: first name, last name or work email"""
     field = input("Enter 1 for first name, 2 for last name or 3 for work email: ").capitalize()
     if field == "1":
         field = "first_name"
@@ -283,29 +289,36 @@ def search_employee():
     elif field == "3":
         field = "work_email"
         field_user = field_to_field_user(field)
-        value = input(f"Enter {field_user}: ").lower()  # not happy with add value within conditional but quick fix to
-        # lower and capitalise treatments
+        value = input(f"Enter {field_user}: ").lower()  # not happy with adding value within conditional but quick fix to
+        # lower and capitalise treatments at this point
     else:
         print("select a valid option: 1, 2 or 3")
     search_employee_by(field, value)
 
 def field_to_field_user(field):
+    """to display the field name to the user in a readable-friendly way. e.g no "_" """
     field_user = field.lower().replace("_", " ")
     return field_user
 
 def get_salary(emp):
+    """To pass a valid argument for sorting by salary to sort method used to sort the employee list."""
     return emp["salary"]  # the key argument expected on sort() is a function, not a string.
                         # So with this function, I hope to return the value for salary from each dictionary in the list
+
 def get_position(emp):
+    """To pass a valid argument for sorting by position to sort method used to sort the employee list."""
     return emp["position"] #same use as salary but now for positions.
 
 def sort_employees():
+    """to sort employees by position or by salary, and by A-Z or Z-A"""
     # Opening JSON file
     f = open('Current_Employees.json')
+
     # returns JSON object as a list that contains dictionary
     data = json.load(f)
     employees_found = []
     f.close()
+
     for emp in data:
             employees_found.append(emp)
 
@@ -354,6 +367,7 @@ def sort_employees():
 
 
 def search_employee_by(field, value):
+
     # Opening JSON file
     f = open('Current_Employees.json')
     # returns JSON object as a list that contains dictionary
