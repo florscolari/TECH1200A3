@@ -3,7 +3,7 @@
 Documentation
 1. Initial pseudocode
 2. Iterated pseudocode
-3.
+3. It2 pseudocode for sorting
 
 Challenges
 1. Understanding how a JSON file works

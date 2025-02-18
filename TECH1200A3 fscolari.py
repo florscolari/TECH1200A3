@@ -294,6 +294,57 @@ def field_to_field_user(field):
     field_user = field.lower().replace("_", " ")
     return field_user
 
+def get_salary(emp):
+    return emp["salary"]  # Extract salary value from each employee
+
+
+def sort_employees():
+    # Opening JSON file
+    f = open('Current_Employees.json')
+    # returns JSON object as a list that contains dictionary
+    data = json.load(f)
+    employees_found = []
+    f.close()
+    for emp in data:
+            employees_found.append(emp)
+
+    print("Choose sorting criteria: 1 - Salary or 2 - Position")
+    sorting_by_field = input()
+
+    while sorting_by_field != "1" and sorting_by_field != "2":
+        print("Please enter a valid choice. 1 for salary or 2 for position")
+        sorting_by_field = input()
+
+    print("Choose sorting order: \n A - Ascending (A-Z - Lowest to highest \n Z - Descending (Z-A - Highest to "
+          "lowest")
+    sort_order = input().upper()
+
+    while sort_order != "A" and sort_order != "Z":
+        print("Please enter a valid choice. A or Z.")
+        sort_order = input().upper()
+
+    if sorting_by_field == "1":
+        user_field = "Salary"
+        if sort_order == "A":
+            user_order = "A-Z"
+            employees_found.sort(key=get_salary) #It doesn't accept a string, must be a function
+        else:
+            user_order = "Z-A"
+            employees_found.sort(key=get_salary,reverse=True)
+
+
+    print(f"{len(employees_found)} employees sorted by {user_field} in {user_order} order.")
+    for emp in employees_found:
+        print(("\n---------------------- " + "\nName: " + emp["first_name"] + " " + emp[
+                "last_name"] + "\nDate of Birth: " + str(emp["dob"]) + "\nAge: " + str(emp["age"]) + " Years old" +
+                   "\nPosition: " + emp["position"] + "\nEmployment Type: " +
+                   emp["employment_type"] + "\nWork Email: " + emp["work_email"] + "\nSalary: $" + str(
+                        float(emp["salary"])) +
+                   "\nBank Account: " + str(emp["bank_account"]) + "\nDepartment: " + emp["department"] +
+                   "\nLocation: " + emp["location"]))
+
+
+
 
 def search_employee_by(field, value):
     # Opening JSON file
@@ -464,7 +515,7 @@ while True:
     elif userChoice == 6:
         delete_employee()
     elif userChoice == 7:
-        print("TODO: Sort Employees")
+        sort_employees()
     elif userChoice == 8:
         print("Exiting Eminent, your Employee Management System. Until next time!")
         break
